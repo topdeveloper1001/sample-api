@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace CoreApi.Security
+namespace SampleApi.Security
 {
     public class IssuerAndRoleHandler : AuthorizationHandler<IssuerAndRoleRequirement>
     {

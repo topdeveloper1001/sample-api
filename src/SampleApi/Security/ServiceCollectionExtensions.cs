@@ -1,4 +1,4 @@
-using CoreApi.Security;
+using SampleApi.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;

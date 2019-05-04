@@ -1,4 +1,4 @@
-namespace CoreApi.Security
+namespace SampleApi.Security
 {
     public class PolicyTypes
     {

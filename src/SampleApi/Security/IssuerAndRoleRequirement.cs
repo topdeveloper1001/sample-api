@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CoreApi.Security
+namespace SampleApi.Security
 {
     public class IssuerAndRoleRequirement : IAuthorizationRequirement
     {

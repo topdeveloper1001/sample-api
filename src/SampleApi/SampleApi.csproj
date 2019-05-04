@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Database\Scripts\CoreApi000_Schema.sql" />
-    <EmbeddedResource Include="Database\Scripts\CoreApi001_DataSeed.sql" />
+    <EmbeddedResource Include="Database\Scripts\SampleApi000_Schema.sql" />
+    <EmbeddedResource Include="Database\Scripts\SampleApi001_DataSeed.sql" />
   </ItemGroup>
 
   <ItemGroup>
