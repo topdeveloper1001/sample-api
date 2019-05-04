@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
+using Willow.Infrastructure.Services;
 using Willow.Infrastructure.Swagger;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -78,6 +79,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     options.OperationFilter<FileUploadOperationFilter>();
                 });
             }
+
+            services.AddSingleton<IDateTimeService, DateTimeService>();
         }
 
         public static void AddApplicationPart(this IServiceCollection services, Assembly assembly)
