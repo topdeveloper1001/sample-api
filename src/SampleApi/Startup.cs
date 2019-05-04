@@ -1,48 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using SampleApi.Database;
+using Willow.Infrastructure.Services;
 
 namespace SampleApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment _env;
+        private readonly ILoggerFactory _loggerFactory;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
+            _env = env;
+            _loggerFactory = loggerFactory;
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddApiServices(Configuration, _env);
+
+            services.AddMemoryCache();
+
+            services.AddAuth0(Configuration["Auth0:Domain"], Configuration["Auth0:Audience"], _env);
+            var connectionString = Configuration.GetConnectionString("SampleDb");
+            AddDbContexts(services, connectionString);
+            services.AddSingleton<IDbUpgradeChecker, DbUpgradeChecker>();
+
+            services
+                .AddHealthChecks()
+                //.AddDbContextCheck<AssetsContext>()
+                .AddAssemblyVersion();
+
+            //API Services
+            services.AddSingleton<IDateTimeService, DateTimeService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        private void AddDbContexts(IServiceCollection services, string connectionString)
         {
-            if (env.IsDevelopment())
+            void contextOptions(DbContextOptionsBuilder o)
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                o.UseSqlServer(connectionString);
+                o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
 
-            app.UseHttpsRedirection();
-            app.UseMvc();
+            //services.AddDbContext<AssetsContext>(contextOptions);
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbUpgradeChecker dbUpgradeChecker)
+        {
+            app.UseHealthChecks("/healthcheck", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            app.UseAuthentication();
+            app.UseApiServices(Configuration, env);
+            dbUpgradeChecker.EnsureDatabaseUpToDate(env);
         }
     }
 }
