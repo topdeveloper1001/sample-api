@@ -50,7 +50,7 @@ namespace Workflow.Tests
             {
                 new DependencyServiceConfiguration
                 {
-                    Name = "Auth0"
+                    Name = "TripPin"
                 }
             }
         };

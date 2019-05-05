@@ -10,6 +10,7 @@ namespace SampleApi.Services
     public interface IFlightService
     {
         Task<List<Airport>> GetAirports(string cityName);
+        Task<Airport> GetAirport(string airportCode);
     }
 
     public class FlightService : IFlightService
@@ -42,6 +43,29 @@ namespace SampleApi.Services
                     CityName = a.Location.City.Name
                 }).ToList();
                 return airports;
+            }
+        }
+
+        public async Task<Airport> GetAirport(string airportCode)
+        {
+            using (var client = _httpClientFactory.CreateClient("TripPin"))
+            {
+                var url = $"Airports/{WebUtility.UrlEncode(airportCode)}";
+                var response = await client.GetAsync(url);
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsAsync<GetAirportsResponse.Airport>();
+                return new Airport
+                {
+                    Name = result.Name,
+                    IataCode = result.IataCode,
+                    Address = result.Location.Address,
+                    CityName = result.Location.City.Name
+                };
             }
         }
 

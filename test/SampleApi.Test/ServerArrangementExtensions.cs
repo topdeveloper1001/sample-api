@@ -28,5 +28,10 @@ namespace Willow.Tests.Infrastructure
             service.UtcNow = currentDateTime;
             return arrangement;
         }
+
+        public static DependencyServiceHttpHandler GetTripPinService(this ServerArrangement arrangement)
+        {
+            return arrangement.GetHttpHandler("TripPin");
+        }
     }
 }

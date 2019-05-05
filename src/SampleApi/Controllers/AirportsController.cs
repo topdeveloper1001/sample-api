@@ -27,5 +27,17 @@ namespace SampleApi.Controllers
             return Ok(AirportDto.Map(airports));
         }
 
+        [HttpGet("airports/{airportCode}")]
+        [ProducesResponseType(typeof(List<AirportDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAirport([FromRoute] string airportCode)
+        {
+            var airport = await _flightService.GetAirport(airportCode);
+            if (airport == null)
+            {
+                return NotFound();
+            }
+            return Ok(AirportDto.Map(airport));
+        }
+
     }
 }
