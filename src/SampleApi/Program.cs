@@ -58,13 +58,13 @@ namespace SampleApi
                 })
                 .UseSerilog((context, logger) =>
                 {
+                    var loggerConfiguration = logger.Enrich.FromLogContext()
+                        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                        .WriteTo.Console();
                     var applicationInsightsKey = context.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
                     if (!string.IsNullOrEmpty(applicationInsightsKey))
                     {
-                        logger.Enrich.FromLogContext()
-                            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                            .WriteTo.ApplicationInsightsEvents(applicationInsightsKey)
-                            .WriteTo.Console();
+                        loggerConfiguration.WriteTo.ApplicationInsightsEvents(applicationInsightsKey);
                     }
                 })
                 .UseAzureAppServices()
