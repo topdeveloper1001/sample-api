@@ -43,7 +43,8 @@ namespace SampleApi
                 .AddDbContextCheck<SampleDbContext>()
                 .AddAssemblyVersion();
 
-            services.AddSingleton<IFlightService, FlightService>();
+            services.AddScoped<IFlightService, FlightService>();
+            services.AddScoped<IStudentService, StudentService>();
         }
 
         private void AddDbContexts(IServiceCollection services, string connectionString)

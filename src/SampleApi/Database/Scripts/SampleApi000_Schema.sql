@@ -17,7 +17,7 @@ CREATE TABLE [dbo].[WP_Students](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](128) NOT NULL,
 	[SchoolId] [uniqueidentifier] NOT NULL,
-    [CreatedTime] [datetime] NOT NULL,
+    [CreatedTime] [datetimeoffset] NOT NULL,
  CONSTRAINT [PK_WP_Students] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
