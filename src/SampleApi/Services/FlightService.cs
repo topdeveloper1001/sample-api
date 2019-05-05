@@ -25,7 +25,7 @@ namespace SampleApi.Services
         {
             using (var client = _httpClientFactory.CreateClient("TripPin"))
             {
-                var url = "airports";
+                var url = "Airports";
                 if (!string.IsNullOrEmpty(cityName))
                 {
                     url += $"?$filter=Location/City/Name%20eq%20%27{WebUtility.UrlEncode(cityName)}%27";
