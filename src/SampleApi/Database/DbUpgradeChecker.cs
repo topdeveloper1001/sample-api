@@ -26,7 +26,7 @@ namespace SampleApi.Database
         public void EnsureDatabaseUpToDate(IHostingEnvironment env)
         {
             var dbUpgradeLogger = _loggerFactory.CreateLogger<DbUpgradeChecker>();
-            var connectionString = _configuration.GetConnectionString("Rail");
+            var connectionString = _configuration.GetConnectionString("SampleDb");
 
             try
             {
