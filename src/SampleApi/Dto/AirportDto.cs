@@ -6,6 +6,7 @@ namespace SampleApi.Dto
 {
     public class AirportDto
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Address { get; set; }
@@ -15,6 +16,7 @@ namespace SampleApi.Dto
         {
             return new AirportDto
             {
+                Id = airport.Id,
                 Name = airport.Name,
                 Code = airport.IataCode,
                 Address = airport.Address,

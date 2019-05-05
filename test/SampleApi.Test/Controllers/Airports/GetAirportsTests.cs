@@ -27,6 +27,7 @@ namespace SampleApi.Test.Controllers.Airports
             var tripPinAirports = expectedAirports.Select(x => new FlightService.GetAirportsResponse.Airport
             {
                 Name = x.Name,
+                IcaoCode = x.Id,
                 IataCode = x.Code,
                 Location = new FlightService.GetAirportsResponse.Location
                 {
@@ -60,6 +61,7 @@ namespace SampleApi.Test.Controllers.Airports
             var tripPinAirports = expectedAirports.Select(x => new FlightService.GetAirportsResponse.Airport
             {
                 Name = x.Name,
+                IcaoCode = x.Id,
                 IataCode = x.Code,
                 Location = new FlightService.GetAirportsResponse.Location
                 {

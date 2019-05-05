@@ -10,7 +10,7 @@ namespace SampleApi.Services
     public interface IFlightService
     {
         Task<List<Airport>> GetAirports(string cityName);
-        Task<Airport> GetAirport(string airportCode);
+        Task<Airport> GetAirport(string airportId);
     }
 
     public class FlightService : IFlightService
@@ -37,6 +37,7 @@ namespace SampleApi.Services
                 var result = await response.Content.ReadAsAsync<GetAirportsResponse>();
                 var airports = result.Value.Select(a => new Airport
                 {
+                    Id = a.IcaoCode,
                     Name = a.Name,
                     IataCode = a.IataCode,
                     Address = a.Location.Address,
@@ -46,11 +47,11 @@ namespace SampleApi.Services
             }
         }
 
-        public async Task<Airport> GetAirport(string airportCode)
+        public async Task<Airport> GetAirport(string airportId)
         {
             using (var client = _httpClientFactory.CreateClient("TripPin"))
             {
-                var url = $"Airports/{WebUtility.UrlEncode(airportCode)}";
+                var url = $"Airports/{WebUtility.UrlEncode(airportId)}";
                 var response = await client.GetAsync(url);
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -61,6 +62,7 @@ namespace SampleApi.Services
                 var result = await response.Content.ReadAsAsync<GetAirportsResponse.Airport>();
                 return new Airport
                 {
+                    Id = result.IcaoCode,
                     Name = result.Name,
                     IataCode = result.IataCode,
                     Address = result.Location.Address,
@@ -76,6 +78,7 @@ namespace SampleApi.Services
             public class Airport
             {
                 public string Name { get; set; }
+                public string IcaoCode { get; set; }
                 public string IataCode { get; set; }
                 public Location Location { get; set; }
             }

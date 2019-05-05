@@ -26,6 +26,7 @@ namespace SampleApi.Test.Controllers.Airports
             var tripPinAirport = new FlightService.GetAirportsResponse.Airport
             {
                 Name = expectedAirport.Name,
+                IcaoCode = expectedAirport.Id,
                 IataCode = expectedAirport.Code,
                 Location = new FlightService.GetAirportsResponse.Location
                 {

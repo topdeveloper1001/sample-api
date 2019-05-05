@@ -27,11 +27,11 @@ namespace SampleApi.Controllers
             return Ok(AirportDto.Map(airports));
         }
 
-        [HttpGet("airports/{airportCode}")]
+        [HttpGet("airports/{airportId}")]
         [ProducesResponseType(typeof(List<AirportDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAirport([FromRoute] string airportCode)
+        public async Task<IActionResult> GetAirport([FromRoute] string airportId)
         {
-            var airport = await _flightService.GetAirport(airportCode);
+            var airport = await _flightService.GetAirport(airportId);
             if (airport == null)
             {
                 return NotFound();
