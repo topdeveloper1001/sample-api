@@ -61,7 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     options.SwaggerDoc("v1", new Info { Title = Assembly.GetEntryAssembly().GetName().Name, Version = "1" });
                     options.EnableAnnotations();
-                    options.CustomSchemaIds(x => x.FullName);
+                    options.CustomSchemaIds(x => x.Name);
 
                     if (configuration.GetSection("Auth0") != null)
                     {

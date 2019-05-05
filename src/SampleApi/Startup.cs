@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SampleApi.Database;
+using SampleApi.Services;
 using Willow.Infrastructure.Services;
 
 namespace SampleApi
@@ -41,8 +42,7 @@ namespace SampleApi
                 //.AddDbContextCheck<AssetsContext>()
                 .AddAssemblyVersion();
 
-            //API Services
-            services.AddSingleton<IDateTimeService, DateTimeService>();
+            services.AddSingleton<IFlightService, FlightService>();
         }
 
         private void AddDbContexts(IServiceCollection services, string connectionString)
