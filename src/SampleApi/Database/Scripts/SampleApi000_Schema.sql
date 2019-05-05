@@ -1,14 +1,32 @@
-﻿/****** Object:  Table [dbo].[WU_Role]    Script Date: 16/04/2019 11:28:47 AM ******/
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[WU_Role](
+
+CREATE TABLE [dbo].[WP_Schools](
 	[Id] [uniqueidentifier] NOT NULL,
-	[Name] [nvarchar](128) NULL,
- CONSTRAINT [PK_WU_Role] PRIMARY KEY CLUSTERED 
+	[Name] [nvarchar](64) NOT NULL,
+ CONSTRAINT [PK_WP_Schools] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[WP_Students](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](128) NOT NULL,
+	[SchoolId] [uniqueidentifier] NOT NULL,
+    [CreatedTime] [datetime] NOT NULL,
+ CONSTRAINT [PK_WP_Students] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[WP_Students]  WITH CHECK ADD  CONSTRAINT [FK_WP_Students_WP_Schools] FOREIGN KEY([SchoolId])
+REFERENCES [dbo].[WP_Schools] ([Id])
+GO
+ALTER TABLE [dbo].[WP_Students] CHECK CONSTRAINT [FK_WP_Students_WP_Schools]
 GO

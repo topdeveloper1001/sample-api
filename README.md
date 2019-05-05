@@ -15,3 +15,12 @@ dotnet run
 https://localhost:5001/swagger
 https://localhost:5001/healthcheck
 ```
+
+# Our Coding Convention (WIP)
+
+#### Use DateTimeOffset instead of DateTime
+https://blogs.msdn.microsoft.com/davidrickard/2012/04/06/datetime-and-datetimeoffset-in-net-good-practices-and-common-pitfalls/
+
+## Database design
+#### Makes columns(as more as possible) be non-nullable
+#### Do not set default value for the column

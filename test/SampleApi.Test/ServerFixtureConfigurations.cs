@@ -7,6 +7,7 @@ using Willow.Tests.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using SampleApi;
 using SampleApi.Database;
+using SampleApi.Domain;
 
 namespace Workflow.Tests
 {
@@ -29,7 +30,6 @@ namespace Workflow.Tests
             },
             MainServicePostConfigureServices = (services) =>
             {
-                //services.ReplaceSingleton<INotificationService, MockNotificationService>();
             }
         };
 
@@ -42,8 +42,7 @@ namespace Workflow.Tests
                 var uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8);
                 var dbName = $"Test_{uniqueId}";
 
-                //services.ReplaceScoped(GetInMemoryOptions<AssetsContext>(dbName));
-                //services.ReplaceSingleton<IBlobService, MockBlobService>();
+                services.ReplaceScoped(GetInMemoryOptions<SampleDbContext>(dbName));
                 services.ReplaceScoped<IDbUpgradeChecker>(_ => new InMemoryDbUpgradeChecker());
             },
             DependencyServices = new List<DependencyServiceConfiguration>

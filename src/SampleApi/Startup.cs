@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SampleApi.Database;
+using SampleApi.Domain;
 using SampleApi.Services;
 using Willow.Infrastructure.Services;
 
@@ -39,7 +40,7 @@ namespace SampleApi
 
             services
                 .AddHealthChecks()
-                //.AddDbContextCheck<AssetsContext>()
+                .AddDbContextCheck<SampleDbContext>()
                 .AddAssemblyVersion();
 
             services.AddSingleton<IFlightService, FlightService>();
@@ -53,7 +54,7 @@ namespace SampleApi
                 o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
 
-            //services.AddDbContext<AssetsContext>(contextOptions);
+            services.AddDbContext<SampleDbContext>(contextOptions);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbUpgradeChecker dbUpgradeChecker)
