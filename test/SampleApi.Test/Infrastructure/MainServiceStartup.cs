@@ -1,11 +1,16 @@
 using MaxKagamine.Moq.HttpClient;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Threading.Tasks;
 using Willow.Infrastructure.Services;
 using Willow.Tests.Infrastructure.MockServices;
 
@@ -68,12 +73,42 @@ namespace Willow.Tests.Infrastructure
 
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
+            // TestServer does not return 500 when an internal exception pops up, it passes the exception to the caller.
+            // Add this middleware to simulate a real server behavior: returns status code 500.
+            app.UseMiddleware<ExceptionMiddleware>();
+
             serviceProvider.InvokeMethod(
                 _startup,
                 "Configure",
                 new Dictionary<Type, object>() { [typeof(IApplicationBuilder)] = app });
         }
 
+        public class ExceptionMiddleware
+        {
+            private readonly RequestDelegate _next;
+            private readonly ILogger<ExceptionMiddleware> _logger;
+
+            public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+            {
+                _next = next;
+                _logger = logger;
+            }
+
+            public async Task Invoke(HttpContext httpContext)
+            {
+                try
+                {
+                    await _next(httpContext);
+                }
+                catch (Exception ex)
+                {
+                    httpContext.Response.ContentType = MediaTypeNames.Text.Plain;
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    _logger.LogError(ex, "Internal server error");
+                    await httpContext.Response.WriteAsync("Internal server error: " + ex.ToString());
+                }
+            }
+        }
     }
 
 }
